@@ -1,0 +1,45 @@
+{% include "header.html" %}
+
+{% block body %}
+
+<div class="panel=heading">
+  <h2>Add data <a class="pull-right btn btn-success" href="/">Back</a> </h2>
+</div>
+
+<div class="panel-body">
+
+  <form action="{{ url_for('processtudent') }}" method="post">
+    <div class="form-group">
+      <label for="name">Contact_id</label>
+      <input type="text" class="form-control" name="Contact_id" id="Contact_id" >
+    </div>
+    <div class="form-group">
+      <label for="name">Fname</label>
+      <input type="text" class="form-control" name="Fname" pattern="[a-zA-Z]*" id="Fname" required="1">
+      
+    </div>
+    <div class="form-group">
+      <label for="name">Mname</label>
+      <input type="text" class="form-control" name="Mname" id="Mname" required="1">
+    </div>
+
+    <div class="form-group">
+      <label for="name">Lname</label>
+      <input type="text" class="form-control" name="Lname" id="Lname" required="1">
+
+    </div>
+
+    <div class="form-group">
+      <input type="hidden" name="action" value="edit">
+      <input type="submit" class="btn btn-success" name="submit" value="Add Data">
+
+    </div>
+
+  </form>
+
+</div>
+
+{% endblock %}
+
+
+{% include "footer.html" %}

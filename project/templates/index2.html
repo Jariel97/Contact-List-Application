@@ -1,0 +1,621 @@
+{% include "header.html" %}
+
+<link href="{{url_for('static', filename = 'css/bootstrap.min.css')}}" rel="stylesheet">
+
+{% block body %}
+<div class="container" style="background-color:pink;">
+  <div class="row">
+    <div class="col md-12">
+    <h2>Global search </h2>
+      <form action="{{ url_for('searchglobal') }}" method="POST">
+        <div class="form-group">
+          <label> Search here: </label>
+          <input type="text" class="form-control" name="search_key" placeholder="Type here to search" required="1">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+      <table class="table table-striped">
+        {% for row in globalcount %}
+        <tr>
+          <td>Hits :{{row.0}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div style=" height:200px; overflow:auto;">
+        <table class="table table-striped table-bordered">
+          <tr>
+            <th>Fname</th>
+            <th>Mname</th>
+            <th>Lname</th>
+            <th>Action</th>
+          </tr>
+          {% for row in globalsearch %}
+          <tr>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>
+              <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+            </td>
+          </tr>
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Information</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('update') }}" method="POST">
+                    <div class="form-group">
+                      <label>Fname:</label>
+                      <input type="text" class="form-control" name="Fname" pattern="[a-zA-Z]*" value="{{row.1}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Mname:</label>
+                      <input type="text" class="form-control" name="Mname" pattern="[a-zA-Z]*" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Lname:</label>
+                      <input type="text" class="form-control" name="Lname" pattern="[a-zA-Z]*" value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="sbumit">Update</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </table>
+      </div>
+      <hr />
+
+      <h2>Contact List <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-target="#myModal">Add Data</button></h2>
+      <form action="{{ url_for('search') }}" method="POST">
+        <div class="form-group">
+          <label> Search here: </label>
+          <input type="text" class="form-control" name="search_key" placeholder="Type here to search" required="1">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+
+
+      {%with messages = get_flashed_messages()%}
+      {%if messages%}
+      {% for message in messages %}
+      <div class="alert alert-success alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        {{message}}
+      </div>
+      {%endfor%}
+      {%endif%}
+      {%endwith%}
+
+
+      <table class="table table-striped">
+        {% for row in count %}
+        <tr>
+          <td>Hits :{{row.0}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div style=" height:200px; overflow:auto;">
+        <table class="table table-striped table-bordered">
+          <tr>
+            <th>Contact_id</th>
+            <th>Fname</th>
+            <th>Mname</th>
+            <th>Lname</th>
+            <th>Action</th>
+          </tr>
+          {% for row in contacts %}
+          <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>
+              <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/delete/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+            </td>
+          </tr>
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Information</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('update') }}" method="POST">
+                    <div class="form-group">
+                      <label>Contact_id:</label>
+                      <input type="text" class="form-control" name="Contact_id" value="{{row.0}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Fname:</label>
+                      <input type="text" class="form-control" name="Fname" pattern="[a-zA-Z]*" value="{{row.1}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Mname:</label>
+                      <input type="text" class="form-control" name="Mname" pattern="[a-zA-Z]*" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Lname:</label>
+                      <input type="text" class="form-control" name="Lname" pattern="[a-zA-Z]*" value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="sbumit">Update</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </table>
+      </div>
+      <hr />
+
+      <h2>Address List <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-target="#myModaladdress">Add Data</button></h2>
+      <form action="{{ url_for('searchaddress') }}" method="POST">
+        <div class="form-group">
+          <label> Search here: </label>
+          <input type="text" class="form-control" name="search_key" placeholder="Type here to search" required="1">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+      <table class="table table-striped">
+        {% for row in countaddress %}
+        <tr>
+          <td>Hits :{{row.0}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div style=" height:200px; overflow:auto;">
+
+        <table class="table table-striped table-bordered">
+
+          <tr>
+            <th>Address_id</th>
+            <th>Contact_id</th>
+            <th>Address_type</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+            <th>Action</th>
+          </tr>
+
+          {% for row in address %}
+          <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>{{row.4}}</td>
+            <td>{{row.5}}</td>
+            <td>{{row.6}}</td>
+            <td>
+              <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/deleteaddress/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+            </td>
+          </tr>
+
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Information</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('updateaddress') }}" method="POST">
+                    <div class="form-group">
+                      <label>Address_id:</label>
+                      <input type="text" class="form-control" name="Address_id" value="{{row.0}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Contact_id:</label>
+                      <input type="text" class="form-control" name="Contact_id" value="{{row.1}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Address_type:</label>
+                      <input type="text" class="form-control" name="Address_type" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Address:</label>
+                      <input type="text" class="form-control" name="Address" value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <label>City:</label>
+                      <input type="text" class="form-control" name="City" value="{{row.4}}">
+                    </div>
+                    <div class="form-group">
+                      <label>State:</label>
+                      <input type="text" class="form-control" name="State" value="{{row.5}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Zip:</label>
+                      <input type="text" class="form-control" name="Zip" value="{{row.6}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="sbumit">Update</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </table>
+      </div>
+      <hr />
+      <h2>Phone List <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-target="#myModalphone">Add Data</button></h2>
+      <form action="{{ url_for('searchphone') }}" method="POST">
+        <div class="form-group">
+          <label> Search here: </label>
+          <input type="text" class="form-control" name="search_key" placeholder="Type here to search" required="1">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+      <table class="table table-striped">
+        {% for row in countphone %}
+        <tr>
+          <td>Hits :{{row.0}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div style=" height:200px; overflow:auto;">
+
+        <table class="table table-striped table-bordered">
+
+          <tr>
+            <th>Phone_id</th>
+            <th>Contact_id</th>
+            <th>Phone_type</th>
+            <th>Area_code</th>
+            <th>Number</th>
+            <th>Action</th>
+          </tr>
+
+          {% for row in phone %}
+          <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>{{row.4}}</td>
+            <td>
+              <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/deletephone/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+            </td>
+          </tr>
+
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Information</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('updatephone') }}" method="POST">
+                    <div class="form-group">
+                      <label>Phone_id:</label>
+                      <input type="text" class="form-control" name="Phone_id" value="{{row.0}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Contact_id:</label>
+                      <input type="text" class="form-control" name="Contact_id" value="{{row.1}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Phone_type:</label>
+                      <input type="text" class="form-control" name="Phone_type" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Area_code:</label>
+                      <input type="text" class="form-control" name="Area_code" value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Number:</label>
+                      <input type="text" class="form-control" name="Number" value="{{row.4}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="sbumit">Update</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </table>
+      </div>
+      <hr>
+      <h2>Date List <button type="button" class="btn btn-success  pull-right" data-toggle="modal" data-target="#myModaldate">Add Data</button></h2>
+      <form action="{{ url_for('searchdate') }}" method="POST">
+        <div class="form-group">
+          <label> Search here: </label>
+          <input type="text" class="form-control" name="search_key" placeholder="Type here to search" required="1">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+      <table class="table table-striped">
+        {% for row in countdate %}
+        <tr>
+          <td>Hits :{{row.0}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div style=" height:200px; overflow:auto;">
+
+        <table class="table table-striped table-bordered">
+
+          <tr>
+            <th>Date_id</th>
+            <th>Contact_id</th>
+            <th>Date_type</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+
+          {% for row in date %}
+          <tr>
+            <td>{{row.0}}</td>
+            <td>{{row.1}}</td>
+            <td>{{row.2}}</td>
+            <td>{{row.3}}</td>
+            <td>
+              <a href="/update/{{row.0}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+              <a href="/deletedate/{{ row.0 }}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure For Delete?')">Delete</a>
+            </td>
+          </tr>
+
+          <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Update Information</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="{{ url_for('updatedate') }}" method="POST">
+                    <div class="form-group">
+                      <label>Date_id:</label>
+                      <input type="text" class="form-control" name="Date_id" value="{{row.0}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Contact_id:</label>
+                      <input type="text" class="form-control" name="Contact_id" value="{{row.1}}">
+                    </div>
+
+                    <div class="form-group">
+                      <label>Date_type:</label>
+                      <input type="text" class="form-control" name="Date_type" pattern="[a-zA-Z]*" value="{{row.2}}">
+                    </div>
+                    <div class="form-group">
+                      <label>Date:</label>
+                      <input type="text" class="form-control" name="Date"  value="{{row.3}}">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary" type="sbumit">Update</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+        </table>
+
+
+      </div>
+
+
+
+      <!-- Modal -->
+
+      <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Please Insert Data</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('insert') }}" method="POST">
+                <div class="form-group">
+                  <label>Contact_id:</label>
+                  <input type="text" class="form-control" name="Contact_id" placeholder="Contact_id">
+                </div>
+                <div class="form-group">
+                  <label>Fname:</label>
+                  <input type="text" class="form-control" name="Fname" pattern="[a-zA-Z]*" placeholder="First Name" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Mname:</label>
+                  <input type="text" class="form-control" name="Mname" pattern="[a-zA-Z]*" placeholder="Middle name" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Lname:</label>
+                  <input type="text" class="form-control" name="Lname" pattern="[a-zA-Z]*" placeholder="Last name" required="1">
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Insert Data</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="myModaladdress" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Please Insert Data</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('insertaddress') }}" method="POST">
+                <div class="form-group">
+                  <label>Address_id:</label>
+                  <input type="text" class="form-control" name="Address_id" >
+                </div>
+                <div class="form-group">
+                  <label>Contact_id:</label>
+                  <input type="text" class="form-control" name="Contact_id" >
+                </div>
+                <div class="form-group">
+                  <label>Address_type:</label>
+                  <input type="text" class="form-control" name="Address_type" >
+                </div>
+                <div class="form-group">
+                  <label>Address:</label>
+                  <input type="text" class="form-control" name="Address" >
+                </div>
+                <div class="form-group">
+                  <label>City:</label>
+                  <input type="text" class="form-control" name="City" >
+                </div>
+                <div class="form-group">
+                  <label>State:</label>
+                  <input type="text" class="form-control" name="State" >
+                </div>
+                <div class="form-group">
+                  <label>Zip:</label>
+                  <input type="text" class="form-control" name="Zip" >
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Insert Data</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="myModalphone" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Please Insert Data</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('insertphone') }}" method="POST">
+                <div class="form-group">
+                  <label>Phone_id:</label>
+                  <input type="text" class="form-control" name="Phone_id" >
+                </div>
+                <div class="form-group">
+                  <label>Contact_id:</label>
+                  <input type="text" class="form-control" name="Contact_id" >
+                </div>
+                <div class="form-group">
+                  <label>Phone_type:</label>
+                  <input type="text" class="form-control" name="Phone_type" >
+                </div>
+                <div class="form-group">
+                  <label>Area_code:</label>
+                  <input type="text" class="form-control" name="Area_code" >
+                </div>
+                <div class="form-group">
+                  <label>Number:</label>
+                  <input type="text" class="form-control" name="Number" >
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Insert Data</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="myModaldate" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Please Insert Data</h4>
+            </div>
+            <div class="modal-body">
+              <form action="{{ url_for('insertdate') }}" method="POST">
+                <div class="form-group">
+                  <label>Date_id:</label>
+                  <input type="text" class="form-control" name="Date_id" >
+                </div>
+                <div class="form-group">
+                  <label>Contact_id:</label>
+                  <input type="text" class="form-control" name="Contact_id" >
+                </div>
+                <div class="form-group">
+                  <label>Date_type:</label>
+                  <input type="text" class="form-control" name="Date_type" pattern="[a-zA-Z]*" >
+                </div>
+                <div class="form-group">
+                  <label>Date:</label>
+                  <input type="text" class="form-control" name="Date" >
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" type="submit">Insert Data</button>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include "footer.html" %}
+  </div>
+</div>
+{% endblock %}
+<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+<script type="text/javascript" src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
